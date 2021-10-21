@@ -21,11 +21,11 @@ const LoginContainer: React.FC = () => {
 
   const submitFunction = async (data: LoginData) => {
 
-    console.log( data );
+    // console.log( data );
     
     const rs = await mutate(data);
 
-    console.log( rs );
+    //console.log( rs );
 
     if (rs && rs.data.success) {
       sessionDispatch({

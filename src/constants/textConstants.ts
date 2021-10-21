@@ -14,7 +14,7 @@ export enum TextConstants {
   OFFICES_LIST_VIEW_ITEM_CREATOR = 'Creador: ',
   OFFICES_LIST_VIEW_ITEM_ADMINISTRATOR = 'Supervisor: ',
   OFFICES_LIST_VIEW_ITEM_REVIEWER = 'Revisor: ',
-  OFFICES_LIST_VIEW_ITEM_DISABLED = 'Habilitada?: ',
+  OFFICES_LIST_VIEW_ITEM_DISABLED = 'Habilitada: ',
   OFFICES_VIEW_FILTER_INPUT_PLACEHOLDER = 'Buscar por código o nombre',
   OFFICES_LIST_VIEW_ITEM_BALANCE = 'Balance: ',
   // Routes View

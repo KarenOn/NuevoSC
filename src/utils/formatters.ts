@@ -199,7 +199,7 @@ export const getIsValidCreditAmount = (
 ) => {
   const parseValue = parseInt(value, 0);
   let success = true;
-  let message = '';
+  let message = 'El credito se creo con exito';
 
   if (parseValue < min || parseValue > max) {
     success = false;

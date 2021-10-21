@@ -252,7 +252,6 @@ const useState = () => {
 const useDispatch: any = () => {
   const context = useContext(DispatchContext);
 
-  console.log( "USE DISPATCH CONTEXT" );
 
   if (context === undefined) {
     throw new Error(ERRORS.PROVIDER_DISPATCH_ERROR);

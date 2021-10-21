@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import { View, FlatList, ListRenderItem } from 'react-native';
 import { Overlay } from 'react-native-elements';
 
@@ -36,6 +36,9 @@ import {
   CustomListItemComponent as ListItem,
 } from '../common/';
 import { ShowListInfoComponent } from '../common/';
+import { useGetClients } from '../../services/clientsService';
+import { useGetRoutes } from '../../services/routesService';
+import { ClientContext, RouteContext } from '../../context/';
 import { FK } from '../../context/session/sessionContext';
 
 const getKeyExtractor = (item: Credit) => `${item.id}`;
@@ -65,6 +68,14 @@ interface Props {
 }
 
 function CreditsComponent(props: Props) {
+  const [clientMutate] = useGetClients();
+  const [routeMutate] = useGetRoutes();
+  const [routeItems,setRouteItems] =useState({})
+  const { clients } = ClientContext.useState();
+  const { routes } = RouteContext.useState();
+  const clientDispatch = ClientContext.useDispatch();
+  const routeDispatch = RouteContext.useDispatch();
+
   const {
     addFunction,
     data,
@@ -89,6 +100,24 @@ function CreditsComponent(props: Props) {
     onAdvancement,
   } = props;
 
+  useEffect(()=>{
+    const fetchData = async () => {
+      const rs = await clientMutate();
+      const rm = await routeMutate();
+      if (rs?.data?.success){
+        clientDispatch({
+          type: ClientContext.ActionTypes.SET_CLIENTS,
+          value: rs.data.responseData,
+        });
+        routeDispatch({
+          type: RouteContext.ActionTypes.SET_ROUTES,
+          value:rm.data.responseData
+        })
+         
+      }}
+      fetchData();
+  },[props.item])
+
   const onPress = (item: Credit) => {
     // @ts-ignore
     refFilter.current.blur();
@@ -99,30 +128,49 @@ function CreditsComponent(props: Props) {
   const renderItem: ListRenderItem<Credit> = ({ item }) => {
     const {
       code,
-      client,
+      _client,
       disabled,
       payments_overdue,
       completed,
       next_payment_date,
     } = item;
-    const clientName = fullName(client as FK);
+    const clientName = ()=> { 
+      if(clients.length !== 0 ){
+        let client = clients.find(r =>{ if(r.id ===_client) return r })
+        return fullName(client as FK)
+    }
+  }
+ 
+  
     const itemStatus = getStatus(
       disabled as boolean,
       payments_overdue,
       completed,
       next_payment_date,
     );
-
+   
     return (
       <ListItem
         type={itemStatus}
         item={item}
         id={`${TextConstants.CREDITS_VIEW_LIST_ITEM_TITLE}${code}`}
-        name={`${TextConstants.CREATE_CLIENT_VIEW_CONTACT_TAB_NAME_LABEL}${clientName}`}
+        name={`${TextConstants.CREATE_CLIENT_VIEW_CONTACT_TAB_NAME_LABEL}${clientName()}`}
         onPress={onPress}
       />
     );
   };
+  const getClient = (id:any)=> { 
+    if(clients.length !== 0 ){
+      let client = clients.find(r =>{ if(r.id === parseInt(id)) return r })
+      return client
+  }
+}
+  const getRoute = (id:any)=> { 
+    if(routes.length !== 0 ){
+      let route = routes.find(r =>{ if(r.id === parseInt(id)) return r })
+      return route
+  }
+}
 
   return (
     <View style={[GeneralStyles.flex1, GeneralStyles.paddingH15]}>
@@ -133,7 +181,7 @@ function CreditsComponent(props: Props) {
             <ShowListInfoComponent
               onClose={onShowOverlay}
               title={credit?.code as string}
-              data={creditsNormalizer(credit)}
+              data={creditsNormalizer({'credit':credit,'client':getClient(credit?._client),'route':getRoute(credit?._route)})}
               showDelete={ADMIN(rolName) && !credit.disabled}
               onDelete={onRemove}
               deleteTitle={TextConstants.CANCELLED}
@@ -141,7 +189,7 @@ function CreditsComponent(props: Props) {
                 EXCLUDE_REVIEWER(rolName) &&
                 !credit.disabled &&
                 !credit.completed &&
-                !credit.route?.disabled
+                !credit._route?.disabled
               }
               isCredit
               onPayment={onAdvancement}

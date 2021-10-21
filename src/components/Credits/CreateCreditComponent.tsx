@@ -87,7 +87,7 @@ function CreateCreditComponent(props: Props) {
   } = props;
   const initialFieldsState = {
     ...defaultValues,
-    client: defaultValues.client?.id.toString(),
+    client: defaultValues._client?.id.toString(),
     amount: defaultValues.amount.toString(),
     duration: defaultValues.duration.toString(),
     percent: defaultValues.percent.toString(),

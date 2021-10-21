@@ -44,10 +44,10 @@ export interface CreditToSend {
 
 export interface Credit {
   id?: number;
-  user?: FK;
-  client?: CLIENT_FK;
+  _user?: FK;
+  _client?: CLIENT_FK;
   office?: FK;
-  route?: ROUTE_FK;
+  _route?: ROUTE_FK;
   code?: string;
   payment_periosity: string;
   amount: number;

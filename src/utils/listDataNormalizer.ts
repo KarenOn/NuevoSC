@@ -18,7 +18,6 @@ import { IncomeExpenseType } from '../context/incomeExpense/incomeExpenseTypeCon
 import { IncomeExpenseCategory } from '../context/incomeExpense/incomeExpenseCategoryContext';
 import { IncomeExpenseConcept } from '../context/incomeExpense/incomeExpenseConceptContext';
 import { Transfer } from '../context/transfer/transferContext';
-
 // Constants
 import { TextConstants } from '../constants/textConstants';
 
@@ -243,15 +242,16 @@ export const clientsNormalizer = (data: Client) => {
   ];
 };
 
-export const creditsNormalizer = (data: Credit) => {
-  const creationDate = moment(data.created_at).format('LL');
-  const lastPaymentDate = moment(data.last_payment_date).format('LL');
+export const creditsNormalizer = (data:any) => {
+  const { client, credit,route} = data
+  const creationDate = moment(credit.created_at).format('LL');
+  const lastPaymentDate = moment(credit.last_payment_date).format('LL');
   const paymentPeriosity = paymentPeriositySelectData().hashTable[
-    data.payment_periosity
+    credit.payment_periosity
   ].label;
-  const disabled = data.disabled ? 'N' : 'S';
-  const clientName = fullName(data.client as CLIENT_FK);
-
+  const disabled = credit.disabled ? 'N' : 'S';
+  const clientName = fullName(client as CLIENT_FK);
+  
   return [
     {
       id: 1,
@@ -259,25 +259,25 @@ export const creditsNormalizer = (data: Credit) => {
     },
     {
       id: 2,
-      value: `${TextConstants.USERS_VIEW_LIST_ITEM_DOCUMENT}${data.client?.document}`,
+      value: `${TextConstants.USERS_VIEW_LIST_ITEM_DOCUMENT}${client?.document}`,
     },
     {
       id: 3,
       value: `${TextConstants.USERS_VIEW_LIST_ITEM_ROUTE}${capitalizeFirst(
-        data.route?.name as string,
+        route?.name as string,
       )}`,
     },
     {
       id: 4,
-      value: `${TextConstants.CLIENTS_VIEW_LIST_ITEM_ADDRESS}${data.client?.address}`,
+      value: `${TextConstants.CLIENTS_VIEW_LIST_ITEM_ADDRESS}${client?.address}`,
     },
     {
       id: 5,
-      value: `${TextConstants.CLIENTS_VIEW_LIST_ITEM_PHONE_NUMBER}${data.client?.phone_number}`,
+      value: `${TextConstants.CLIENTS_VIEW_LIST_ITEM_PHONE_NUMBER}${client?.phone_number}`,
     },
     {
       id: 6,
-      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_PENDING_PAY}${data.client?.pending_pay}`,
+      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_PENDING_PAY}${client?.pending_pay}`,
     },
     {
       id: 7,
@@ -285,11 +285,11 @@ export const creditsNormalizer = (data: Credit) => {
     },
     {
       id: 8,
-      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_CREDIT_VALUE}${data.amount}`,
+      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_CREDIT_VALUE}${credit.amount}`,
     },
     {
       id: 9,
-      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_PERCENT}${data.percent}%`,
+      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_PERCENT}${credit.percent}%`,
     },
     {
       id: 10,
@@ -301,11 +301,11 @@ export const creditsNormalizer = (data: Credit) => {
     },
     {
       id: 12,
-      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_PAYMENTS_OVERDUE}${data.payments_overdue}`,
+      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_PAYMENTS_OVERDUE}${credit.payments_overdue}`,
     },
     {
       id: 13,
-      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_PAYMENTS}${data.payments}`,
+      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_PAYMENTS}${credit.payments}`,
     },
     {
       id: 14,
@@ -313,23 +313,23 @@ export const creditsNormalizer = (data: Credit) => {
     },
     {
       id: 15,
-      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_BALANCE}${data.balance}`,
+      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_BALANCE}${credit.balance}`,
     },
     {
       id: 16,
-      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_PAYMENT_AMOUNT}${data.payment_amount}`,
+      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_PAYMENT_AMOUNT}${credit.payment_amount}`,
     },
     {
       id: 17,
-      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_NEXT_PAYMENT_AMOUNT}${data.real_payment_amount}`,
+      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_NEXT_PAYMENT_AMOUNT}${credit.real_payment_amount}`,
     },
     {
       id: 18,
-      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_POSITIVE_BALANCE}${data.positive_balance}`,
+      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_POSITIVE_BALANCE}${credit.positive_balance}`,
     },
     {
       id: 19,
-      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_ADVANCEMENT}${data.advancement}`,
+      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_ADVANCEMENT}${credit.advancement}`,
     },
     {
       id: 20,
@@ -337,7 +337,7 @@ export const creditsNormalizer = (data: Credit) => {
     },
     {
       id: 21,
-      value: `${TextConstants.ROLES_VIEW_LIST_ITEM_DESCRIPTION}${data.observation}`,
+      value: `${TextConstants.ROLES_VIEW_LIST_ITEM_DESCRIPTION}${credit.observation}`,
     },
   ];
 };

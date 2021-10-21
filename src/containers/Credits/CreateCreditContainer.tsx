@@ -86,6 +86,7 @@ const CreateCreditContainer: React.FC = () => {
       values.payment_periosity,
       parseDuration,
     );
+
     const isValidCreditAmount = getIsValidCreditAmount(
       min_credit_value as number,
       max_credit_value as number,

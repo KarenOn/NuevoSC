@@ -164,8 +164,10 @@ export const ClientsStack = () => (
 );
 
 export const CreditsStack = () => (
-  <ClientContext.Provider>
+  <ClientContext.Provider> 
+    <RouteContext.Provider>
     <CreditContext.Provider>
+     
       <Stack.Navigator
         headerMode="none"
         initialRouteName={ROUTES.CREDITS_ROUTE}>
@@ -183,7 +185,9 @@ export const CreditsStack = () => (
           component={CreateAdvancementView}
         />
       </Stack.Navigator>
+
     </CreditContext.Provider>
+    </RouteContext.Provider>
   </ClientContext.Provider>
 );
 
