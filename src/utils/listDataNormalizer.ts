@@ -342,14 +342,15 @@ export const creditsNormalizer = (data:any) => {
   ];
 };
 
-export const advancementsNormalizer = (data: Advancement) => {
-  const disabled = data.disabled ? 'N' : 'S';
-  const clientName = fullName(data.client as CLIENT_FK);
+export const advancementsNormalizer = (data:any) => {
+  const {advancement,client,credit} = data
+  const disabled = advancement.disabled ? 'N' : 'S';
+  const clientName = fullName(client as CLIENT_FK);
 
   return [
     {
       id: 1,
-      value: `${TextConstants.ADVANCEMENTS_LIST_ITEM_CREDIT_CODE}${data.credit?.id}`,
+      value: `${TextConstants.ADVANCEMENTS_LIST_ITEM_CREDIT_CODE}${credit?.id}`,
     },
     {
       id: 2,
@@ -357,17 +358,17 @@ export const advancementsNormalizer = (data: Advancement) => {
     },
     {
       id: 3,
-      value: `${TextConstants.USERS_VIEW_LIST_ITEM_DOCUMENT}${data.client?.document}`,
+      value: `${TextConstants.USERS_VIEW_LIST_ITEM_DOCUMENT}${client?.document}`,
     },
     {
       id: 4,
       value: `${
         TextConstants.ADVANCEMENTS_LIST_ITEM_ADVANCEMENT_TYPE
-      }${capitalizeFirst(data._advancement_type)}`,
+      }${capitalizeFirst(advancement._advancement_type)}`,
     },
     {
       id: 5,
-      value: `${TextConstants.ADVANCEMENTS_LIST_ITEM_AMOUNT}${data.amount}`,
+      value: `${TextConstants.ADVANCEMENTS_LIST_ITEM_AMOUNT}${advancement.amount}`,
     },
     {
       id: 6,
@@ -375,7 +376,7 @@ export const advancementsNormalizer = (data: Advancement) => {
     },
     {
       id: 7,
-      value: `${TextConstants.ROLES_VIEW_LIST_ITEM_DESCRIPTION}${data.details}`,
+      value: `${TextConstants.ROLES_VIEW_LIST_ITEM_DESCRIPTION}${advancement.details}`,
     },
   ];
 };

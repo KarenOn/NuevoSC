@@ -43,9 +43,7 @@ export const getStatus = (
 };
 
 export const fullName = (data: FK | CLIENT_FK) =>
-  `${capitalizeFirst(data?.name || '')} ${capitalizeFirst(
-    data?.last_name || '',
-  )}`;
+  `${capitalizeFirst(data?.name || '')} ${capitalizeFirst(data?.last_name || '',)}`;
 
 export const dateFormat = (value: Date | string) =>
   moment(value).format('YYYY-MM-DD');

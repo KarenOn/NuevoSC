@@ -38,8 +38,8 @@ export interface AdvancementToSend {
 export interface Advancement {
   id?: number;
   user?: FK;
-  client?: CLIENT_FK;
-  credit?: FK;
+  _client?: CLIENT_FK;
+  _credit?: FK;
   _advancement_type: string;
   code?: string;
   amount: number;

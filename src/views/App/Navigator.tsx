@@ -192,6 +192,8 @@ export const CreditsStack = () => (
 );
 
 export const AdvancementsStack = () => (
+  <ClientContext.Provider>
+  <CreditContext.Provider>
   <AdvancementContext.Provider>
     <Stack.Navigator
       headerMode="none"
@@ -206,6 +208,8 @@ export const AdvancementsStack = () => (
       />
     </Stack.Navigator>
   </AdvancementContext.Provider>
+  </CreditContext.Provider>
+  </ClientContext.Provider>
 );
 
 export const IncomeExpensesStack = () => (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { View, FlatList, ListRenderItem } from 'react-native';
 import { Overlay } from 'react-native-elements';
 
@@ -35,6 +35,9 @@ import {
   SplashComponent,
   CustomListItemComponent as ListItem,
 } from '../common/';
+import { useGetClients } from '../../services/clientsService';
+import { useGetCredits } from '../../services/creditsService';
+import { ClientContext, CreditContext } from '../../context/';
 import { ShowListInfoComponent } from '../common/';
 
 const getKeyExtractor = (item: Advancement) => `${item.id}`;
@@ -59,6 +62,12 @@ interface Props {
 }
 
 function AdvancementsComponent(props: Props) {
+  const [clientMutate] = useGetClients();
+  const [creditMutate] = useGetCredits();
+  const { clients } = ClientContext.useState();
+  const { credits } = CreditContext.useState();
+  const clientDispatch = ClientContext.useDispatch();
+  const creditDispatch = CreditContext.useDispatch();
   const {
     data,
     error,
@@ -66,7 +75,7 @@ function AdvancementsComponent(props: Props) {
     status,
     onSetItem,
     onShowOverlay,
-    item: credit,
+    item: advancement,
     showOverlay,
     onFilterHandlerChange,
     filterValue,
@@ -85,22 +94,56 @@ function AdvancementsComponent(props: Props) {
     onShowOverlay();
   };
 
+  useEffect(()=>{
+    const fetchData = async () => {
+      const rs = await clientMutate();
+      const rm = await creditMutate();
+      if (rs?.data?.success){
+        clientDispatch({
+          type: ClientContext.ActionTypes.SET_CLIENTS,
+          value: rs.data.responseData,
+        });
+        creditDispatch({
+          type: CreditContext.ActionTypes.SET_CREDITS,
+          value:rm.data.responseData
+        })
+         
+      }}
+      fetchData();
+  },[props.item])
+
   const renderItem: ListRenderItem<Advancement> = ({ item }) => {
-    const { code, client, disabled } = item;
+    const { code, _client, disabled } = item;
     const itemStatus = getStatus(disabled as boolean);
-    const name = fullName(client as CLIENT_FK);
+    const name =  ()=> { 
+      if(clients.length !== 0 ){
+        let client = clients.find(r =>{ if(r.id ===_client) return r })
+        return fullName(client as CLIENT_FK)
+    }
+  }
 
     return (
       <ListItem
         type={itemStatus}
         item={item}
         id={`${TextConstants.OFFICES_LIST_VIEW_ITEM_ID}${code}`}
-        name={`${TextConstants.CREATE_CLIENT_VIEW_CONTACT_TAB_NAME_LABEL}${name}`}
+        name={`${TextConstants.CREATE_CLIENT_VIEW_CONTACT_TAB_NAME_LABEL}${name()}`}
         onPress={onPress}
       />
     );
   };
-
+  const getClient = (id:any)=> { 
+    if(clients.length !== 0 ){
+      let client = clients.find(r =>{ if(r.id === parseInt(id)) return r })
+      return client
+  }
+}
+  const getCredit = (id:any)=> { 
+    if(credits.length !== 0 ){
+      let advCredit = credits.find(r =>{ if(r.id === parseInt(id)) return r })
+      return advCredit
+  }
+}
   return (
     <View style={[GeneralStyles.flex1, GeneralStyles.paddingH15]}>
       {showOverlay && (
@@ -109,12 +152,12 @@ function AdvancementsComponent(props: Props) {
           children={
             <ShowListInfoComponent
               onClose={onShowOverlay}
-              title={credit?.code as string}
-              data={advancementsNormalizer(credit)}
-              onlyShowDelete={!credit.disabled}
+              title={advancement?.code as string}
+              data={advancementsNormalizer({'advancement':advancement,'client':getClient(advancement?._client),'credit':getCredit(advancement?._credit)})}
+              onlyShowDelete={!advancement.disabled}
               onDelete={onRemove}
               deleteTitle={TextConstants.CANCELLED}
-              showButtons={ADMIN(rolName) && !credit.disabled}
+              showButtons={ADMIN(rolName) && !advancement.disabled}
               errors={BASE_MESSAGES}
             />
           }

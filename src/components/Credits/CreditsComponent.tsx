@@ -70,7 +70,6 @@ interface Props {
 function CreditsComponent(props: Props) {
   const [clientMutate] = useGetClients();
   const [routeMutate] = useGetRoutes();
-  const [routeItems,setRouteItems] =useState({})
   const { clients } = ClientContext.useState();
   const { routes } = RouteContext.useState();
   const clientDispatch = ClientContext.useDispatch();
