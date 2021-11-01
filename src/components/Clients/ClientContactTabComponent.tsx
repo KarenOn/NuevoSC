@@ -84,7 +84,7 @@ function ClientContactTabComponent(props: Props) {
   } = props;
   const initialFieldsState = {
     ...defaultValues,
-    route: defaultValues.route?.id,
+    route: defaultValues._route?.id,
   };
   const btnSubmitTitle = _id
     ? TextConstants.EDIT

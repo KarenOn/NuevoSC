@@ -110,6 +110,7 @@ const ClientsContainer: React.FC = () => {
   ]);
 
   const onAdd = () => {
+    if(validationAccess(name,ROUTES.CLIENTS_ROUTE,'create')){
     clientDispatch({
       type: ClientContext.ActionTypes.SET_NEW_CLIENT_DRAFT,
       value: {
@@ -119,14 +120,21 @@ const ClientsContainer: React.FC = () => {
       },
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+   }
   };
 
   const onEdit = () => {
+    if(validationAccess(name,ROUTES.CLIENTS_ROUTE,'update')){
     clientDispatch({
       type: ClientContext.ActionTypes.SET_CLIENT_DRAFT,
       value: item,
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+   }
   };
 
   const onRemove = async () => {
