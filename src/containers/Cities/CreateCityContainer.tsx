@@ -1,5 +1,7 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
+import message from '../../utils/message.json'
+import {validationAccess} from '../../utils/';
 
 // Components
 import { CreateCityComponent } from '../../components';
@@ -10,10 +12,11 @@ import { CityContext, SessionContext } from '../../context/';
 // Services
 import { cityData, useCreateCity, useUpdateCity } from '../../services/';
 import { NotificationComponent } from '../../components/common';
+import { ROUTES } from 'src/constants';
 
 const CreateCityContainer: React.FC = () => {
   const {
-    user: { id },
+    user: { id,name },
   } = SessionContext.useState();
   const { cityDraft } = CityContext.useState();
   const [mutate, { status, error }] = useCreateCity();
@@ -28,15 +31,19 @@ const CreateCityContainer: React.FC = () => {
       ...values,
       _user: id?.toString() as string,
     };
+  if(validationAccess(name,ROUTES.CITIES_ROUTE,'create')){
     const rs = await mutate(data);
-
     if (rs && rs.data.success) {
-      NotificationComponent('operation success!! ')
+      NotificationComponent(message[0].success.operation)
       navigation.goBack();
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onEdit = async (values: CityContext.City) => {
+    if(validationAccess(name,ROUTES.CITIES_ROUTE,'create')){
     const data: cityData = {
       ...values,
       _user: id?.toString() as string,
@@ -47,6 +54,9 @@ const CreateCityContainer: React.FC = () => {
       NotificationComponent('operation success!! ')
       navigation.goBack();
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   return (
