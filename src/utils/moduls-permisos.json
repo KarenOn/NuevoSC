@@ -1,0 +1,91 @@
+[
+   {
+            "administrador":{
+               "abonos":["create","read"],
+               "ciudades":[],
+               "clientes":["create","read"],
+               "creditos": ["create","read"],
+               "TIPO DOCUMENTO":[],
+               "INGRESOS/EGRESOS":["read"],
+               "oficinas":[],
+               "REPORTE DE RUTA":[],
+               "CAJA RUTAS":[],
+               "CUADRE RUTAS":[],
+               "INGRESOS/EGRESOS RUTAS":[],
+               "roles":[],
+               "rutas":[],
+               "TRASLADOS":[],
+               "usuarios":[]
+            },
+            "asesor":{
+                "abonos":["create","read"],
+                "ciudades":[],
+                "clientes":["create","read"],
+                "creditos": ["create","read"],
+                "TIPO DOCUMENTO":[],
+                "INGRESOS/EGRESOS":["create"],
+                "oficinas":[],
+                "REPORTE DE RUTA":[],
+                "CAJA RUTAS":[],
+                "CUADRE RUTAS":[],
+                "INGRESOS/EGRESOS RUTAS":[],
+                "roles":[],
+                "rutas":[],
+                "TRASLADOS":[],
+                "usuarios":[]
+            },
+            "director":{
+                "abonos":["create","read","update","delete"],
+                "ciudades":["read"],
+                "clientes":["create","read","update","delete"],
+                "creditos": ["create","read","update","delete"],
+                "TIPO DOCUMENTO":["read"],
+                "INGRESOS/EGRESOS":["create","read","update","delete"],
+                "oficinas":["create","read","update","delete"],
+                "REPORTE DE RUTA":["read","update"],
+                "CAJA RUTAS":["read","update"],
+                "CUADRE RUTAS":["read","update"],
+                "INGRESOS/EGRESOS RUTAS":["read","update"],
+                "roles":["read"],
+                "rutas":["create","read","update","delete"],
+                "TRASLADOS":["create","read","update","delete"],
+                "usuarios":["create","read","update","delete"]
+            },
+            "gerente":{
+                "abonos":["create","read","update","delete"],
+                "ciudades":["create","read","update","delete"],
+                "clientes":["create","read","update","delete"],
+                "creditos": ["create","read","update","delete"],
+                "TIPO DOCUMENTO":["create","read","update","delete"],
+                "INGRESOS/EGRESOS":["create","read","update","delete"],
+                "oficinas":["create","read","update","delete"],
+                "REPORTE DE RUTA":["create","read","update","delete"],
+                "CAJA RUTAS":["create","read","update","delete"],
+                "CUADRE RUTAS":["create","read","update","delete"],
+                "INGRESOS/EGRESOS RUTAS":["create","read","update","delete"],
+                "roles":["create","read","update","delete"],
+                "rutas":["create","read","update","delete"],
+                "TRASLADOS":["create","read","update","delete"],
+                "usuarios":["create","read","update","delete"]
+            },
+            "supervisor":{
+                "abonos":["read"],
+                "ciudades":[],
+                "clientes":["read"],
+                "creditos": ["read"],
+                "TIPO DOCUMENTO":[],
+                "INGRESOS/EGRESOS":[],
+                "oficinas":[],
+                "REPORTE DE RUTA":["read"],
+                "CAJA RUTAS":[],
+                "CUADRE RUTAS":[],
+                "INGRESOS/EGRESOS RUTAS":[],
+                "roles":[],
+                "rutas":[],
+                "TRASLADOS":[],
+                "usuarios":[]
+            }
+   
+        
+    }
+]

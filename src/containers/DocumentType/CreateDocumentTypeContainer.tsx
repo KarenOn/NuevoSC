@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { NotificationComponent } from '../../components/common';
 
 // Components
 import { CreateDocumentTypeComponent } from '../../components';
@@ -34,6 +35,7 @@ const CreateDocumentTypeContainer: React.FC = () => {
     const rs = await mutate(data);
 
     if (rs && rs.data.success) {
+      NotificationComponent('Operation success')
       navigation.goBack();
     }
   };
@@ -46,6 +48,7 @@ const CreateDocumentTypeContainer: React.FC = () => {
     const rs = await editMutate(data);
 
     if (rs && rs.data.success) {
+      NotificationComponent('Operation success')
       navigation.goBack();
     }
   };

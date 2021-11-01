@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { NotificationComponent } from '../../components/common';
 
 // Components
 import { CreditsTabComponent } from '../../components';
@@ -37,6 +38,7 @@ const CreditsTabContainer: React.FC = () => {
 
     if (rs && rs.data.success) {
       // @ts-ignore
+      //NotificationComponent('Operation success');
       params?.parentNavigator.goBack();
     }
   };
@@ -53,6 +55,7 @@ const CreditsTabContainer: React.FC = () => {
 
     if (rs && rs.data.success) {
       // @ts-ignore
+      //NotificationComponent('Operation success')
       params?.parentNavigator.goBack();
     }
   };

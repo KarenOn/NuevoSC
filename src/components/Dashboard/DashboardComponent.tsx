@@ -4,6 +4,8 @@ import { Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import Accordion from 'react-native-collapsible/Accordion';
 import { moderateScale } from 'react-native-size-matters';
+// Utils
+import {validationAccess} from '../../utils/';
 
 // Constants
 import { ROUTES, TextConstants } from '../../constants';
@@ -51,6 +53,8 @@ interface Props {
   user: User;
 }
 
+
+
 function DashboardComponent({ user }: Props) {
   const [generalActiveSections, setGeneralActiveSections] = useState([]);
   const [movementsActiveSections, setMovementsActiveSections] = useState([]);
@@ -60,48 +64,68 @@ function DashboardComponent({ user }: Props) {
     rol: { name },
   } = user;
 
+
   const renderGeneralSection = () => (
     <View style={GeneralStyles.paddingH10}>
+      {/* ciudades */}
+      {validationAccess(name,ROUTES.CITIES_ROUTE,'read') ? 
       <View style={GeneralStyles.marginB15}>
-        <Button
+      <Button
           onPress={() => navigation.navigate(ROUTES.CITIES_ROUTE)}
           title={ROUTES.CITIES_ROUTE.toUpperCase()}
-        />
-      </View>
+        /> 
+      </View>: null }
+    {/* tipos de documentos */}
+      {validationAccess(name,ROUTES.DOCUMENT_TYPE_ROUTE,'read') ? 
       <View style={GeneralStyles.marginB15}>
         <Button
           onPress={() => navigation.navigate(ROUTES.DOCUMENT_TYPE_ROUTE)}
           title={ROUTES.DOCUMENT_TYPE_ROUTE.toUpperCase()}
         />
-      </View>
+      </View> : null }
+      { validationAccess(name,ROUTES.ROLES_ROUTE,'read') ?
       <View style={GeneralStyles.marginB15}>
         <Button
           onPress={() => navigation.navigate(ROUTES.ROLES_ROUTE)}
           title={ROUTES.ROLES_ROUTE.toUpperCase()}
         />
-      </View>
+      </View> : null}
     </View>
   );
 
   const renderMovementsSection = () => {
     return (
       <View style={GeneralStyles.paddingH10}>
-        {EXCLUDE_REVIEWER(name) && (
+        {validationAccess(name,ROUTES.INCOME_EXPENSE_ROUTE,'read') ? 
+        <View style={GeneralStyles.marginB15}>
+        <Button
+          onPress={() => navigation.navigate(ROUTES.INCOME_EXPENSE_ROUTE)}
+          title={TextConstants.INCOME_EXPENSES_TITLE.toUpperCase()}
+        />
+      </View> : null }
+        {/* {EXCLUDE_REVIEWER(name) && (
           <View style={GeneralStyles.marginB15}>
             <Button
               onPress={() => navigation.navigate(ROUTES.INCOME_EXPENSE_ROUTE)}
               title={TextConstants.INCOME_EXPENSES_TITLE.toUpperCase()}
             />
           </View>
-        )}
-        {SUPERVISOR(name) && (
+        )} */}
+        {validationAccess(name,ROUTES.TRANSFER_ROUTE,'read') ? 
+         <View style={GeneralStyles.marginB15}>
+         <Button
+           onPress={() => navigation.navigate(ROUTES.TRANSFER_ROUTE)}
+           title={ROUTES.TRANSFER_ROUTE.toUpperCase()}
+         />
+       </View> : null }
+        {/* {SUPERVISOR(name) && (
           <View style={GeneralStyles.marginB15}>
             <Button
               onPress={() => navigation.navigate(ROUTES.TRANSFER_ROUTE)}
               title={ROUTES.TRANSFER_ROUTE.toUpperCase()}
             />
           </View>
-        )}
+        )} */}
       </View>
     );
   };
@@ -111,18 +135,24 @@ function DashboardComponent({ user }: Props) {
       <View style={GeneralStyles.paddingH10}>
         {SUPERVISOR(name) && (
           <>
+          {/* caja rutas */}
+          {validationAccess(name,ROUTES.ROUTE_BALANCE_ROUTE,'read') ? 
             <View style={GeneralStyles.marginB15}>
               <Button
                 onPress={() => navigation.navigate(ROUTES.ROUTE_BALANCE_ROUTE)}
                 title={ROUTES.ROUTE_BALANCE_ROUTE}
               />
-            </View>
+            </View> :null}
+            {/* Cuadre rutas */}
+            {validationAccess(name,ROUTES.ROUTE_CUADRE_ROUTE,'read') ? 
             <View style={GeneralStyles.marginB15}>
               <Button
                 onPress={() => navigation.navigate(ROUTES.ROUTE_CUADRE_ROUTE)}
                 title={ROUTES.ROUTE_CUADRE_ROUTE}
               />
-            </View>
+            </View> : null }
+            {/* ingresos y egreso ruta */}
+            {validationAccess(name,ROUTES.ROUTE_INCOME_EXPENSE_ROUTE,'read') ? 
             <View style={GeneralStyles.marginB15}>
               <Button
                 onPress={() =>
@@ -130,10 +160,11 @@ function DashboardComponent({ user }: Props) {
                 }
                 title={ROUTES.ROUTE_INCOME_EXPENSE_ROUTE}
               />
-            </View>
+            </View> : null }
           </>
         )}
         {ONLY_ADVISER(name) && (
+          // reporte de rutas
           <View style={GeneralStyles.marginB15}>
             <Button
               onPress={() => navigation.navigate(ROUTES.REVIEWER_REPORT_ROUTE)}
@@ -211,44 +242,65 @@ function DashboardComponent({ user }: Props) {
             underlayColor="transparent"
           />
         )}
+        {/* oficinas */}
+        {validationAccess(name,ROUTES.OFFICES_ROUTE,'read') ? 
         <View style={GeneralStyles.marginB15}>
           <Button
             onPress={() => navigation.navigate(ROUTES.OFFICES_ROUTE)}
             title={ROUTES.OFFICES_ROUTE.toUpperCase()}
           />
-        </View>
+        </View> : null }
+        {/* rutas */}
+        {validationAccess(name,ROUTES.ROUTES_ROUTE,'read') ? 
         <View style={GeneralStyles.marginB15}>
-          <Button
-            onPress={() => navigation.navigate(ROUTES.ROUTES_ROUTE)}
-            title={ROUTES.ROUTES_ROUTE.toUpperCase()}
-          />
-        </View>
-        {SUPERVISOR(name) && (
+        <Button
+          onPress={() => navigation.navigate(ROUTES.ROUTES_ROUTE)}
+          title={ROUTES.ROUTES_ROUTE.toUpperCase()}
+        />
+      </View> : null }
+
+      {/* usuarios */}
+      {validationAccess(name,ROUTES.USERS_ROUTE,'read') ? 
+      <View style={GeneralStyles.marginB15}>
+            <Button
+              onPress={() => navigation.navigate(ROUTES.USERS_ROUTE)}
+              title={ROUTES.USERS_ROUTE.toUpperCase()}
+            />
+      </View>: null }
+        {/* {SUPERVISOR(name) && (
           <View style={GeneralStyles.marginB15}>
             <Button
               onPress={() => navigation.navigate(ROUTES.USERS_ROUTE)}
               title={ROUTES.USERS_ROUTE.toUpperCase()}
             />
           </View>
-        )}
+        )} */}
+
+        {/* clientes */}
+        {validationAccess(name,ROUTES.CLIENTS_ROUTE,'read') ? 
         <View style={GeneralStyles.marginB15}>
-          <Button
-            onPress={() => navigation.navigate(ROUTES.CLIENTS_ROUTE)}
-            title={ROUTES.CLIENTS_ROUTE.toUpperCase()}
-          />
-        </View>
+        <Button
+          onPress={() => navigation.navigate(ROUTES.CLIENTS_ROUTE)}
+          title={ROUTES.CLIENTS_ROUTE.toUpperCase()}
+        />
+      </View>: null }
+      {/* creditos */}
+      {validationAccess(name,ROUTES.CREDITS_ROUTE,'read') ? 
         <View style={GeneralStyles.marginB15}>
-          <Button
-            onPress={() => navigation.navigate(ROUTES.CREDITS_ROUTE)}
-            title={ROUTES.CREDITS_ROUTE.toUpperCase()}
-          />
-        </View>
+        <Button
+          onPress={() => navigation.navigate(ROUTES.CREDITS_ROUTE)}
+          title={ROUTES.CREDITS_ROUTE.toUpperCase()}
+        />
+      </View>: null }
+      {/* abonos */}
+      {validationAccess(name,ROUTES.ADVANCEMENTS_ROUTE,'read') ? 
         <View style={GeneralStyles.marginB15}>
-          <Button
-            onPress={() => navigation.navigate(ROUTES.ADVANCEMENTS_ROUTE)}
-            title={ROUTES.ADVANCEMENTS_ROUTE.toUpperCase()}
-          />
-        </View>
+        <Button
+          onPress={() => navigation.navigate(ROUTES.ADVANCEMENTS_ROUTE)}
+          title={ROUTES.ADVANCEMENTS_ROUTE.toUpperCase()}
+        />
+      </View>: null }
+        
         {EXCLUDE_REVIEWER(name) && (
           <Accordion
             containerStyle={GeneralStyles.marginTLess15}

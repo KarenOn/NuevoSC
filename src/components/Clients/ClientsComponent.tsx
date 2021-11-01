@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { View, FlatList, ListRenderItem } from 'react-native';
 import { Overlay } from 'react-native-elements';
 
@@ -43,6 +43,10 @@ import {
   CustomSelectComponent as Select,
 } from '../common/';
 import { ShowListInfoComponent } from '../common/';
+import { useGetOffices } from '../../services/officesService';
+import { useGetRoutes } from '../../services/routesService';
+import { RouteContext, OfficeContext } from '../../context/';
+import { getItem } from '../../utils/';
 
 const getKeyExtractor = (item: Client) => `${item.id}`;
 
@@ -76,6 +80,12 @@ interface Props {
 }
 
 function ClientsComponent(props: Props) {
+  const [ officeMutate] = useGetOffices();
+  const [routeMutate] = useGetRoutes();
+  const OfficeCont = OfficeContext.useState();
+  const RoutesCont = RouteContext.useState();
+  const officeDispatch = OfficeContext.useDispatch();
+  const routeDispatch = RouteContext.useDispatch();
   const {
     addFunction,
     editFunction,
@@ -105,10 +115,28 @@ function ClientsComponent(props: Props) {
     routes,
   } = props;
 
+
   const { data: officeData, hashTable } = officesSelectData(offices);
   const { data: routeData, hashTable: routeHashTable } = routesSelectData(
     routes,
   );
+  useEffect(()=>{
+    const fetchData = async () => {
+      const ofs = await officeMutate();
+      const rm = await routeMutate();
+      if (ofs?.data?.success){
+        officeDispatch({
+          type: OfficeContext.ActionTypes.SET_OFFICES,
+          value: ofs.data.responseData,
+        });
+        routeDispatch({
+          type: RouteContext.ActionTypes.SET_ROUTES,
+          value:rm.data.responseData
+        })
+         
+      }}
+      fetchData();
+  },[props.item])
 
   const onPress = (item: Client) => {
     // @ts-ignore
@@ -143,7 +171,7 @@ function ClientsComponent(props: Props) {
               onConfirm={editFunction}
               onClose={onShowOverlay}
               title={`${client.name} ${capitalizeFirst(client.last_name)}`}
-              data={clientsNormalizer(client)}
+              data={clientsNormalizer({"client":client,"office":getItem(client._office,OfficeCont.offices),"route":getItem(client._route,RoutesCont.routes)})}
               showDelete
               onDelete={onRemove}
               status={removeStatus}

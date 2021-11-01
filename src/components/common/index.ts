@@ -14,6 +14,7 @@ import CustomSelectComponent from './CustomSelect/CustomSelectComponent';
 import ReadOnlyInputComponent from './ReadOnlyInput/ReadOnlyInputComponent';
 import ReportItemComponent from './ReportItem/ReportItemComponent';
 import DateInputComponent from './DateInput/DateInputComponent';
+import NotificationComponent from './notification/notification-component';
 
 export {
   SplashComponent,
@@ -32,4 +33,5 @@ export {
   ReadOnlyInputComponent,
   ReportItemComponent,
   DateInputComponent,
+  NotificationComponent
 };

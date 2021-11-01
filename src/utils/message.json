@@ -1,0 +1,10 @@
+[{
+   "error":{
+       "access":"ERROR : ACCESO DENEGADO",
+       "operation":"ERROR: FAILED..."
+   },
+ "success":{
+     "access":"OK",
+     "operation":"OPERATION SUCCESS"
+ }
+}]

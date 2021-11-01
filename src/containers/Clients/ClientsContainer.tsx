@@ -3,6 +3,7 @@ import { useNavigation, useIsFocused } from '@react-navigation/native';
 
 // Components
 import { ClientsComponent } from '../../components';
+import { NotificationComponent } from '../../components/common';
 
 // Context
 import {
@@ -14,6 +15,8 @@ import {
 
 // Constants
 import { ROUTES } from '../../constants/';
+import { validationAccess } from '../../utils/';
+import message  from '../../utils/message.json'
 
 // Mocks
 import { clientMock } from '../../mocks/';
@@ -134,19 +137,24 @@ const ClientsContainer: React.FC = () => {
       disabled: !item.disabled,
       _user: id as number,
     };
-    const rs = await removeMutate(data);
+    if(validationAccess(name,ROUTES.CLIENTS_ROUTE,'delete')){
+          const rs = await removeMutate(data);
 
-    if (rs && rs.data.success) {
-      // Close modal and reload
-      onShowOverlay();
-      const getRs = await mutate();
-      if (getRs && getRs.data.success) {
-        clientDispatch({
-          type: ClientContext.ActionTypes.SET_CLIENTS,
-          value: getRs.data.responseData,
-        });
-      }
-    }
+          if (rs && rs.data.success) {
+            // Close modal and reload
+            onShowOverlay();
+            NotificationComponent(message[0].success.operation)
+            const getRs = await mutate();
+            if (getRs && getRs.data.success) {
+              clientDispatch({
+                type: ClientContext.ActionTypes.SET_CLIENTS,
+                value: getRs.data.responseData,
+              });
+            }
+          }
+     } else{
+      NotificationComponent(message[0].error.access)
+     }
   };
 
   const onNavigate = () => {

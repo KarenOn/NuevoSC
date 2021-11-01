@@ -192,48 +192,49 @@ export const usersNormalizer = (data: User) => {
   ];
 };
 
-export const clientsNormalizer = (data: Client) => {
+export const clientsNormalizer = (data: any) => {
+  const {client,office,route} = data
   const disabled = data.disabled ? 'N' : 'S';
   return [
     {
       id: 1,
-      value: `${TextConstants.OFFICES_LIST_VIEW_ITEM_ID}${data.code}`,
+      value: `${TextConstants.OFFICES_LIST_VIEW_ITEM_ID}${client.code}`,
     },
     {
       id: 2,
-      value: `${TextConstants.USERS_VIEW_LIST_ITEM_DOCUMENT}${data.document}`,
+      value: `${TextConstants.USERS_VIEW_LIST_ITEM_DOCUMENT}${client.document}`,
     },
     {
       id: 3,
-      value: `${TextConstants.CLIENTS_VIEW_LIST_ITEM_ADDRESS}${data.address}`,
+      value: `${TextConstants.CLIENTS_VIEW_LIST_ITEM_ADDRESS}${client.address}`,
     },
     {
       id: 4,
       value: `${TextConstants.USERS_VIEW_LIST_ITEM_ROUTE}${capitalizeFirst(
-        data.route.name,
+        route?.name,
       )}`,
     },
     {
       id: 5,
       value: `${TextConstants.ROUTES_LIST_VIEW_ITEM_OFFICE}${capitalizeFirst(
-        data.office?.name as string,
+        office?.name as string,
       )}`,
     },
     {
       id: 6,
       value: `${TextConstants.ROUTES_LIST_VIEW_ITEM_PHONE_NUMBER}${
-        data.house_phone_number || ''
+        client.house_phone_number || ''
       }`,
     },
     {
       id: 7,
       value: `${TextConstants.CLIENTS_VIEW_LIST_ITEM_PHONE_NUMBER}${
-        data.phone_number || ''
+        client.phone_number || ''
       }`,
     },
     {
       id: 8,
-      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_PAYMENTS_OVERDUE}${data.payments_overdue}`,
+      value: `${TextConstants.CREDITS_VIEW_LIST_ITEM_PAYMENTS_OVERDUE}${client.payments_overdue}`,
     },
     {
       id: 9,
@@ -584,7 +585,7 @@ export const clientsSelectData = (clients: Client[]) => {
   const data = ['default'];
 
   const clientData = clients.filter((obj) => {
-    return !obj.disabled && !obj.route?.disabled;
+    return !obj.disabled && !obj._route?.disabled;
   });
 
   clientData.map((client) => {

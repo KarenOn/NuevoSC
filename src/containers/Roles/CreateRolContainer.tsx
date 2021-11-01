@@ -9,6 +9,7 @@ import { RolContext, SessionContext } from '../../context/';
 
 // Services
 import { RolData, useCreateRol, useUpdateRol } from '../../services/';
+import { NotificationComponent } from '../../components/common';
 
 const CreateRolContainer: React.FC = () => {
   const {
@@ -27,6 +28,7 @@ const CreateRolContainer: React.FC = () => {
     const rs = await mutate(data);
 
     if (rs && rs.data.success) {
+      NotificationComponent('Operation success')
       navigation.goBack();
     }
   };
@@ -39,6 +41,7 @@ const CreateRolContainer: React.FC = () => {
     const rs = await editMutate(data);
 
     if (rs && rs.data.success) {
+      NotificationComponent('Operation success')
       navigation.goBack();
     }
   };

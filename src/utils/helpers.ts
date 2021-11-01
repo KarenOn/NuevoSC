@@ -2,6 +2,7 @@ import moment from 'moment';
 
 import { FK } from '../context/session/sessionContext';
 import { CLIENT_FK } from '../context/advancement/advancementContext';
+import permisosData from './moduls-permisos.json'
 
 export type status = 'default' | 'warning' | 'disabled' | 'completed';
 
@@ -47,3 +48,18 @@ export const fullName = (data: FK | CLIENT_FK) =>
 
 export const dateFormat = (value: Date | string) =>
   moment(value).format('YYYY-MM-DD');
+
+export  const validationAccess =(rol:string,module:string,permiso:string)=>{
+    if(permisosData[0][rol][module].includes(permiso)){
+        return true
+    }else{
+      return false
+    }
+  }
+
+export const getItem = (id:any,arr:any[])=> { 
+    if(arr.length !== 0 ){
+      let newArr = arr.find(r =>{ if(r.id === parseInt(id)) return r })
+      return newArr
+  }
+}

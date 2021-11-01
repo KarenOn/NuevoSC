@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { NotificationComponent } from '../../components/common'
 
 // Components
 import { CancelCreditComponent } from '../../components';
@@ -33,6 +34,7 @@ const CancelCreditContainer: React.FC = () => {
     const rs = await mutate(data);
 
     if (rs?.data?.success) {
+      NotificationComponent('operation success!!')
       navigation.goBack();
     }
   };

@@ -43,9 +43,9 @@ export interface ClientToSend {
 
 export interface Client {
   id?: number;
-  user?: FK;
-  office?: FK;
-  route: ROUTE_FK;
+  _user?: FK;
+  _office?: FK;
+  _route: ROUTE_FK;
   document_type: FK;
   code?: string;
   document: string;

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { ToastAndroid, TouchableOpacity } from 'react-native';
 
 // Components
 import { CreateCreditComponent } from '../../components';
 
 // Context
 import { CreditContext, SessionContext, ClientContext } from '../../context/';
+import { NotificationComponent } from '../../components/common'
 
 // Services
 import { useCreateCredit, useGetClients } from '../../services/';
@@ -114,7 +116,10 @@ const CreateCreditContainer: React.FC = () => {
         const rs = await mutate(data);
 
         if (rs?.data?.success) {
+          NotificationComponent('operation success');
           navigation.goBack();
+        }else{
+          NotificationComponent('error')
         }
       } else {
         setSubmitError({ message: isValidCreditAmount.message });

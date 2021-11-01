@@ -19,6 +19,7 @@ import {
   useGetOffices,
   useGetRouteByOffice,
 } from '../../services/';
+import {NotificationComponent}from '../../components/common';
 
 interface SubmitProps {
   office: number;
@@ -86,6 +87,7 @@ const CreateTransferContainer: React.FC = () => {
     const rs = await mutate(data);
 
     if (rs && rs.data.success) {
+      NotificationComponent('Operation success')
       navigation.goBack();
     }
   };
@@ -106,6 +108,7 @@ const CreateTransferContainer: React.FC = () => {
     const rs = await editMutate(data);
 
     if (rs && rs.data.success) {
+      NotificationComponent('Operation success')
       navigation.goBack();
     }
   };

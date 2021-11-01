@@ -9,6 +9,7 @@ import { CityContext, SessionContext } from '../../context/';
 
 // Services
 import { cityData, useCreateCity, useUpdateCity } from '../../services/';
+import { NotificationComponent } from '../../components/common';
 
 const CreateCityContainer: React.FC = () => {
   const {
@@ -30,6 +31,7 @@ const CreateCityContainer: React.FC = () => {
     const rs = await mutate(data);
 
     if (rs && rs.data.success) {
+      NotificationComponent('operation success!! ')
       navigation.goBack();
     }
   };
@@ -42,6 +44,7 @@ const CreateCityContainer: React.FC = () => {
     const rs = await editMutate(data);
 
     if (rs && rs.data.success) {
+      NotificationComponent('operation success!! ')
       navigation.goBack();
     }
   };

@@ -29,6 +29,7 @@ import {
   SUPERVISOR,
   EXCLUDE_REVIEWER,
   ONLY_ADVISER,
+  validationAccess
 } from '../../utils/';
 
 interface Props extends DrawerContentComponentProps<DrawerContentOptions> {
@@ -86,6 +87,7 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
 
   const renderGeneralSection = () => (
     <View>
+      { validationAccess(user?.rol?.name,ROUTES.CITIES_ROUTE,'read') ?
       <View
         style={[
           GeneralStyles.marginV3,
@@ -99,7 +101,9 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
             </Text>
           </View>
         </TouchableWithoutFeedback>
-      </View>
+      </View> :null }
+      {/* tipo documento */}
+      { validationAccess(user?.rol?.name,ROUTES.DOCUMENT_TYPE_ROUTE,'read') ?
       <View
         style={[
           GeneralStyles.marginV3,
@@ -114,7 +118,8 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
             </Text>
           </View>
         </TouchableWithoutFeedback>
-      </View>
+      </View> :null } 
+      { validationAccess(user?.rol?.name,ROUTES.ROLES_ROUTE,'read') ?
       <View
         style={[
           GeneralStyles.marginV3,
@@ -128,14 +133,15 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
             </Text>
           </View>
         </TouchableWithoutFeedback>
-      </View>
-    </View>
+      </View>:null}
+    </View> 
   );
 
   const renderMovementsSection = () => {
     return (
       <View>
-        {EXCLUDE_REVIEWER(user.rol.name) && (
+       {/* {EXCLUDE_REVIEWER(user.rol.name) && ( */}
+          { validationAccess(user?.rol?.name,ROUTES.INCOME_EXPENSE_ROUTE,'read') ?
           <View
             style={[
               GeneralStyles.marginV3,
@@ -152,9 +158,10 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
                 </Text>
               </View>
             </TouchableWithoutFeedback>
-          </View>
-        )}
-        {SUPERVISOR(user.rol.name) && (
+          </View> : null }
+        {/* )} */}
+        {/* {SUPERVISOR(user.rol.name) && ( */}
+          { validationAccess(user?.rol?.name,ROUTES.TRANSFER_ROUTE,'read') ?
           <View
             style={[
               GeneralStyles.marginV3,
@@ -171,8 +178,8 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
                 </Text>
               </View>
             </TouchableWithoutFeedback>
-          </View>
-        )}
+          </View> :null } 
+        {/*  )} */}
       </View>
     );
   };
@@ -180,8 +187,9 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
   const renderReportsSection = () => {
     return (
       <View>
-        {SUPERVISOR(user.rol.name) && (
+        {/* {SUPERVISOR(user.rol.name) && ( */}
           <>
+          { validationAccess(user?.rol?.name,ROUTES.ROUTE_BALANCE_ROUTE,'read') ?
             <View
               style={[
                 GeneralStyles.marginV3,
@@ -199,6 +207,8 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
                 </View>
               </TouchableWithoutFeedback>
             </View>
+            :null}
+            { validationAccess(user?.rol?.name,ROUTES.ROUTE_CUADRE_ROUTE,'read') ?
             <View
               style={[
                 GeneralStyles.marginV3,
@@ -215,7 +225,8 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
                   </Text>
                 </View>
               </TouchableWithoutFeedback>
-            </View>
+            </View> : null }
+            { validationAccess(user?.rol?.name,ROUTES.ROUTE_INCOME_EXPENSE_ROUTE,'read') ?
             <View
               style={[
                 GeneralStyles.marginV3,
@@ -234,10 +245,11 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
                   </Text>
                 </View>
               </TouchableWithoutFeedback>
-            </View>
+            </View>:null}
           </>
-        )}
-        {ONLY_ADVISER(user.rol.name) && (
+        {/* )} */}
+        {/* {ONLY_ADVISER(user.rol.name) && ( */}
+          { validationAccess(user?.rol?.name,ROUTES.REVIEWER_REPORT_ROUTE,'read') ?
           <View
             style={[
               GeneralStyles.marginV3,
@@ -254,8 +266,8 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
                 </Text>
               </View>
             </TouchableWithoutFeedback>
-          </View>
-        )}
+          </View> : null}
+        {/* )} */}
       </View>
     );
   };
@@ -355,6 +367,7 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
             underlayColor="transparent"
           />
         )}
+        { validationAccess(user?.rol?.name,ROUTES.OFFICES_ROUTE,'read') ?
         <View
           style={[
             GeneralStyles.marginV3,
@@ -368,7 +381,8 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
               </Text>
             </View>
           </TouchableWithoutFeedback>
-        </View>
+        </View> : null }
+        { validationAccess(user?.rol?.name,ROUTES.ROUTES_ROUTE,'read') ?
         <View
           style={[
             GeneralStyles.marginV3,
@@ -382,8 +396,9 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
               </Text>
             </View>
           </TouchableWithoutFeedback>
-        </View>
-        {SUPERVISOR(user.rol.name) && (
+        </View>:null}
+        {/* {SUPERVISOR(user.rol.name) && ( */}
+          { validationAccess(user?.rol?.name,ROUTES.USERS_ROUTE,'read') ?
           <View
             style={[
               GeneralStyles.marginV3,
@@ -399,8 +414,9 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
                 </Text>
               </View>
             </TouchableWithoutFeedback>
-          </View>
-        )}
+          </View>:null}
+        {/* )} */}
+        { validationAccess(user?.rol?.name,ROUTES.CLIENTS_ROUTE,'read') ?
         <View
           style={[
             GeneralStyles.marginV3,
@@ -414,7 +430,8 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
               </Text>
             </View>
           </TouchableWithoutFeedback>
-        </View>
+        </View>: null}
+        { validationAccess(user?.rol?.name,ROUTES.CREDITS_ROUTE,'read') ?
         <View
           style={[
             GeneralStyles.marginV3,
@@ -428,7 +445,8 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
               </Text>
             </View>
           </TouchableWithoutFeedback>
-        </View>
+        </View>:null}
+        { validationAccess(user?.rol?.name,ROUTES.ADVANCEMENTS_ROUTE,'read') ?
         <View
           style={[
             GeneralStyles.marginV3,
@@ -443,7 +461,7 @@ const CustomDrawerComponent: React.FC<Props> = (props) => {
               </Text>
             </View>
           </TouchableWithoutFeedback>
-        </View>
+        </View>:null}
         {EXCLUDE_REVIEWER(user.rol.name) && (
           <Accordion
             containerStyle={[

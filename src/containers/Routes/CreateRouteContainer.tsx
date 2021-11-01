@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
+import { NotificationComponent} from '../../components/common';
 // Components
 import { CreateRouteComponent } from '../../components';
 
@@ -75,6 +75,7 @@ const CreateRouteContainer: React.FC = () => {
     const rs = await mutate(data);
 
     if (rs && rs.data.success) {
+      NotificationComponent('Operation success')
       navigation.goBack();
     }
   };
@@ -89,6 +90,7 @@ const CreateRouteContainer: React.FC = () => {
     const rs = await editMutate(data);
 
     if (rs && rs.data.success) {
+      NotificationComponent('Operation success')
       navigation.goBack();
     }
   };
