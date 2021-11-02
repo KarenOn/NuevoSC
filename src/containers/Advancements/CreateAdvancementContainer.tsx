@@ -4,6 +4,9 @@ import moment from 'moment';
 
 // Components
 import { CreateAdvancementComponent } from '../../components';
+import { NotificationComponent } from '../../components/common/';
+import message from '../../utils/message.json';
+import {validationAccess} from '../../utils/';
 
 // Context
 import {
@@ -17,6 +20,7 @@ import { useCreateAdvancement } from '../../services/';
 
 // Utils
 import { getIsValidAmount, getPeriosity } from '../../utils/';
+import { ROUTES } from '../../constants';
 
 interface SubmitError {
   message?: string;
@@ -26,7 +30,7 @@ const defaultError: SubmitError = {};
 
 const CreateAdvancementContainer: React.FC = () => {
   const {
-    user: { id },
+    user: { id,rol:{name} },
   } = SessionContext.useState();
   const { advancementDraft } = AdvancementContext.useState();
   const { creditDraft } = CreditContext.useState();
@@ -49,22 +53,25 @@ const CreateAdvancementContainer: React.FC = () => {
       values.amount.toString(),
       creditDraft.balance?.toString() as string,
     );
-
-    if (isValidAmount.success) {
-      const data: AdvancementContext.AdvancementToSend = {
-        ...values,
-        _user: id as number,
-        _credit: creditDraft.id,
-      };
-
-      const rs = await mutate(data);
-
-      if (rs?.data?.success) {
-        navigation.goBack();
-      }
-    } else {
-      setSubmitError({ message: isValidAmount.message });
-    }
+    if(validationAccess(name,ROUTES.ADVANCEMENTS_ROUTE,'create')){
+        if (isValidAmount.success) {
+          const data: AdvancementContext.AdvancementToSend = {
+            ...values,
+            _user: id as number,
+            _credit: creditDraft.id,
+          };
+          const rs = await mutate(data);
+          if (rs?.data?.success) {
+            navigation.goBack();
+            NotificationComponent(message[0].success.operation)
+          }
+        } else {
+          setSubmitError({ message: isValidAmount.message });
+          NotificationComponent(message[0].error.operation)
+        }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   return (

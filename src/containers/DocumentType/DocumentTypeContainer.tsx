@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-
+import { validationAccess } from'../../utils'
+import message from '../../utils/message.json'
+import {NotificationComponent} from '../../components/common'
 // Components
 import { DocumentTypeComponent } from '../../components';
 
 // Context
-import { DocumentTypeContext } from '../../context/';
+import { DocumentTypeContext,SessionContext } from '../../context/';
 
 // Constants
 import { ROUTES } from '../../constants/';
@@ -23,6 +25,7 @@ import {
 const DocumentTypeContainer: React.FC = () => {
   const [isFocus, setIsFocus] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
+  const {user:{rol:{name}}} = SessionContext.useState();
   const [item, setItem] = useState({});
   const [filterValue, setFilterValue] = useState('');
   const [mutate, { status, error }] = useGetDocumentTypes();
@@ -73,23 +76,33 @@ const DocumentTypeContainer: React.FC = () => {
   ]);
 
   const onAdd = () => {
+    if(validationAccess(name,ROUTES.DOCUMENT_TYPE_ROUTE,'create')){
     documentTypeDispatch({
       type: DocumentTypeContext.ActionTypes.SET_DOCUMENT_TYPE_DRAFT,
       value: documentTypeMock,
     });
     onNavigate();
+  }else{
+      NotificationComponent(message[0].error.access)
+    }
   };
 
   const onEdit = () => {
+    if(validationAccess(name,ROUTES.DOCUMENT_TYPE_ROUTE,'update')){
     documentTypeDispatch({
       type: DocumentTypeContext.ActionTypes.SET_DOCUMENT_TYPE_DRAFT,
       value: item,
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onRemove = async () => {
-    // @ts-ignore
+  
+    if(validationAccess(name,ROUTES.DOCUMENT_TYPE_ROUTE,'delete')){
+     // @ts-ignore
     const rs = await removeMutate(item.id);
 
     if (rs && rs.data.success) {
@@ -102,6 +115,8 @@ const DocumentTypeContainer: React.FC = () => {
           value: getRs.data.responseData,
         });
       }
+    }}else{
+      NotificationComponent(message[0].error.access)
     }
   };
 

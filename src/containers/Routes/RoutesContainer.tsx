@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
+import {validationAccess} from '../../utils'
+import message from '../../utils/message.json'
+import { NotificationComponent } from '../../components/common';
 
 // Components
 import { RoutesComponent } from '../../components';
@@ -73,6 +76,7 @@ const RoutesContainer: React.FC = () => {
   }, [isFocused, mutate, routeDispatch, filterValue, reset, removeReset]);
 
   const onAdd = () => {
+    if(validationAccess(name,ROUTES.ROUTES_ROUTE,'create')){
     routeDispatch({
       type: RouteContext.ActionTypes.SET_ROUTE_DRAFT,
       value: {
@@ -81,15 +85,22 @@ const RoutesContainer: React.FC = () => {
         office: { id: '' },
       },
     });
-    onNavigate();
+    onNavigate();}
+    else{
+      NotificationComponent(message[0].error.access)
+    }
   };
 
   const onEdit = () => {
+    if(validationAccess(name,ROUTES.ROUTES_ROUTE,'update')){
     routeDispatch({
       type: RouteContext.ActionTypes.SET_ROUTE_DRAFT,
       value: item,
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onRemove = async () => {
@@ -101,18 +112,22 @@ const RoutesContainer: React.FC = () => {
       _user: id as number,
     };
     const rs = await removeMutate(data);
-
+    if(validationAccess(name,ROUTES.ROUTES_ROUTE,'delete')){
     if (rs && rs.data.success) {
       // Close modal and reload
       onShowOverlay();
       const getRs = await mutate();
       if (getRs && getRs.data.success) {
+        NotificationComponent(message[0].success.operation)
         routeDispatch({
           type: RouteContext.ActionTypes.SET_ROUTES,
           value: getRs.data.responseData,
         });
       }
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onNavigate = () => {

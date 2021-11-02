@@ -1,12 +1,15 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { NotificationComponent } from '../../components/common';
+import message from '../../utils/message.json'
+import {validationAccess} from '../../utils/';
 
 // Components
 import { CreateDocumentTypeComponent } from '../../components';
 
 // Context
 import { DocumentTypeContext, SessionContext } from '../../context/';
+import { ROUTES } from '../../constants/';
 
 // Services
 import {
@@ -17,7 +20,7 @@ import {
 
 const CreateDocumentTypeContainer: React.FC = () => {
   const {
-    user: { id },
+    user: { id ,rol:{name} },
   } = SessionContext.useState();
   const { documentTypeDraft } = DocumentTypeContext.useState();
   const [mutate, { status, error }] = useCreateDocumentType();
@@ -32,12 +35,16 @@ const CreateDocumentTypeContainer: React.FC = () => {
       ...values,
       _user: id?.toString() as string,
     };
+    if(validationAccess(name,ROUTES.DOCUMENT_TYPE_ROUTE,'create')){
     const rs = await mutate(data);
 
     if (rs && rs.data.success) {
-      NotificationComponent('Operation success')
+      NotificationComponent(message[0].success.operation)
       navigation.goBack();
     }
+  }else{
+      NotificationComponent(message[0].error.access)
+  }
   };
 
   const onEdit = async (values: DocumentTypeContext.DocumentType) => {
@@ -45,12 +52,16 @@ const CreateDocumentTypeContainer: React.FC = () => {
       ...values,
       _user: id?.toString() as string,
     };
+    if(validationAccess(name,ROUTES.DOCUMENT_TYPE_ROUTE,'update')){
     const rs = await editMutate(data);
 
     if (rs && rs.data.success) {
-      NotificationComponent('Operation success')
+      NotificationComponent(message[0].success.operation)
       navigation.goBack();
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   return (

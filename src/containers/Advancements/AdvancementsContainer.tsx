@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-
+import {validationAccess} from '../../utils/'
+import message from '../../utils/message.json'
 // Components
 import { AdvancementsComponent } from '../../components';
+import { NotificationComponent } from'../../components/common'
 
 // Context
 import { AdvancementContext, SessionContext } from '../../context/';
@@ -62,6 +64,7 @@ const AdvancementsContainer: React.FC = () => {
   }, [isFocused, mutate, advancementDispatch, filterValue, reset]);
 
   const onRemove = () => {
+    if(validationAccess(name,ROUTES.ADVANCEMENTS_ROUTE,'delete')){
     advancementDispatch({
       type: AdvancementContext.ActionTypes.SET_ADVANCEMENT_DRAFT,
       value: item,
@@ -71,7 +74,10 @@ const AdvancementsContainer: React.FC = () => {
     refFilter.current.blur();
     setFilterValue('');
     setIsFocus(false);
-    navigation.navigate(ROUTES.CANCEL_ADVANCEMENT_ROUTE);
+    navigation.navigate(ROUTES.CANCEL_ADVANCEMENT_ROUTE);}
+    else{
+      NotificationComponent(message[0].error.access)
+    }
   };
 
   const onShowOverlay = () => setShowOverlay(!showOverlay);

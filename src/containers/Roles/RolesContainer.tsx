@@ -1,11 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
+import {validationAccess} from '../../utils'
+import message from '../../utils/message.json'
+import { NotificationComponent } from '../../components/common';
+
 
 // Components
 import { RolesComponent } from '../../components';
 
 // Context
-import { RolContext } from '../../context/';
+import { RolContext,SessionContext } from '../../context/';
 
 // Constants
 import { ROUTES } from '../../constants/';
@@ -21,6 +25,7 @@ import {
 } from '../../services/';
 
 const RolesContainer: React.FC = () => {
+  const {user:{rol:{name}}} = SessionContext.useState()
   const [isFocus, setIsFocus] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
   const [item, setItem] = useState({});
@@ -63,22 +68,31 @@ const RolesContainer: React.FC = () => {
   }, [isFocused, mutate, rolDispatch, filterValue, reset, removeReset]);
 
   const onAdd = () => {
+    if(validationAccess(name,ROUTES.ROLES_ROUTE,'create')){
     rolDispatch({
       type: RolContext.ActionTypes.SET_ROL_DRAFT,
       value: rolMock,
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onEdit = () => {
+    if(validationAccess(name,ROUTES.ROLES_ROUTE,'update')){
     rolDispatch({
       type: RolContext.ActionTypes.SET_ROL_DRAFT,
       value: item,
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onRemove = async () => {
+    if(validationAccess(name,ROUTES.ROLES_ROUTE,'delete')){
     // @ts-ignore
     const rs = await removeMutate(item.id);
 
@@ -93,6 +107,9 @@ const RolesContainer: React.FC = () => {
         });
       }
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onNavigate = () => {

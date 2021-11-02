@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-
+import { NotificationComponent} from '../../components/common';
+import {validationAccess} from '../../utils'
+import message from '../../utils/message.json'
 // Components
 import { TransfersComponent } from '../../components';
 
@@ -73,6 +75,7 @@ const TransfersContainer: React.FC = () => {
   }, [isFocused, mutate, transferDispatch, filterValue, reset, removeReset]);
 
   const onAdd = () => {
+    if(validationAccess(name,ROUTES.TRANSFER_ROUTE,'create')){
     transferDispatch({
       type: TransferContext.ActionTypes.SET_TRANSFER_DRAFT,
       value: {
@@ -83,14 +86,21 @@ const TransfersContainer: React.FC = () => {
       },
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onEdit = () => {
+    if(validationAccess(name,ROUTES.TRANSFER_ROUTE,'update')){
     transferDispatch({
       type: TransferContext.ActionTypes.SET_TRANSFER_DRAFT,
       value: item,
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onRemove = async () => {
@@ -101,6 +111,7 @@ const TransfersContainer: React.FC = () => {
       disabled: !item.disabled,
       _user: id as number,
     };
+    if(validationAccess(name,ROUTES.TRANSFER_ROUTE,'delete')){
     const rs = await removeMutate(data);
 
     if (rs && rs.data.success) {
@@ -113,6 +124,8 @@ const TransfersContainer: React.FC = () => {
           value: getRs.data.responseData,
         });
       }
+    }}else{
+      NotificationComponent(message[0].error.access)
     }
   };
 

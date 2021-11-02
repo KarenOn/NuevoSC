@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-
+import {NotificationComponent} from '../../components/common';
+import message from '../../utils/message.json';
+import {validationAccess} from '../../utils/';
 // Components
 import { CitiesComponent } from '../../components';
 
 // Context
-import { CityContext } from '../../context/';
+import { CityContext,SessionContext } from '../../context/';
 
 // Constants
 import { ROUTES } from '../../constants/';
@@ -26,6 +28,11 @@ const CitiesContainer: React.FC = () => {
   const [item, setItem] = useState({});
   const [filterValue, setFilterValue] = useState('');
   const [mutate, { status, error }] = useGetCities();
+  const {
+    user: {
+      rol: { name },
+    },
+  } = SessionContext.useState();
   const [
     filterMutate,
     { error: filterError, reset },
@@ -66,24 +73,34 @@ const CitiesContainer: React.FC = () => {
   }, [isFocused, mutate, cityDispatch, filterValue, reset, removeReset]);
 
   const onAdd = () => {
+  if(validationAccess(name,ROUTES.CITIES_ROUTE,'create')){
     cityDispatch({
       type: CityContext.ActionTypes.SET_CITY_DRAFT,
       value: cityMock,
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onEdit = () => {
+    if(validationAccess(name,ROUTES.CITIES_ROUTE,'update')){
     cityDispatch({
       type: CityContext.ActionTypes.SET_CITY_DRAFT,
       value: item,
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onRemove = async () => {
-    // @ts-ignore
-    const rs = await removeMutate(item.id);
+    
+    if(validationAccess(name,ROUTES.CITIES_ROUTE,'delete')){
+      // @ts-ignore
+    const rs = await removeMutate(item?.id);
 
     if (rs && rs.data.success) {
       // Close modal and reload
@@ -95,6 +112,9 @@ const CitiesContainer: React.FC = () => {
           value: getRs.data.responseData,
         });
       }
+    }}
+    else{
+      NotificationComponent(message[0].error.access)
     }
   };
 

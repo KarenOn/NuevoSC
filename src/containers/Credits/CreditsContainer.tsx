@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-
+import {validationAccess} from '../../utils/';
+import message from '../../utils/message.json';
+import {NotificationComponent} from '../../components/common/';
 // Components
 import { CreditsComponent } from '../../components';
 
@@ -50,7 +52,6 @@ const CreditsContainer: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       const rs = await mutate();
-
       if (rs && rs.data.success) {
         creditDispatch({
           type: CreditContext.ActionTypes.SET_CREDITS,
@@ -73,6 +74,7 @@ const CreditsContainer: React.FC = () => {
   }, [isFocused, mutate, creditDispatch, filterValue, reset, visitReset]);
 
   const onAdd = () => {
+    if( validationAccess(name,ROUTES.CREDITS_ROUTE,'create')){
     creditDispatch({
       type: CreditContext.ActionTypes.SET_NEW_CREDIT_DRAFT,
       value: {
@@ -81,9 +83,13 @@ const CreditsContainer: React.FC = () => {
       },
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onRemove = () => {
+    if(validationAccess(name,ROUTES.CREDITS_ROUTE,'delete')){
     creditDispatch({
       type: CreditContext.ActionTypes.SET_NEW_CREDIT_DRAFT,
       value: {
@@ -98,6 +104,8 @@ const CreditsContainer: React.FC = () => {
     setFilterValue('');
     setIsFocus(false);
     navigation.navigate(ROUTES.CANCEL_CREDIT_ROUTE);
+  }else{NotificationComponent(message[0].error.access)}
+
   };
 
   const onVisit = async () => {

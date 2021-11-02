@@ -1,5 +1,10 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { NotificationComponent } from'../../components/common/';
+import message from '../../utils/message.json';
+import {validationAccess} from '../../utils/';
+import { ROUTES } from '../../constants';
+
 
 // Components
 import { CancelAdvancementComponent } from '../../components';
@@ -16,7 +21,7 @@ interface SubmitProps {
 
 const CancelAdvancementContainer: React.FC = () => {
   const {
-    user: { id },
+    user: { id,rol:{name} },
   } = SessionContext.useState();
   const { advancementDraft } = AdvancementContext.useState();
   const [mutate, { status, error }] = useRemoveAdvancement();
@@ -29,12 +34,16 @@ const CancelAdvancementContainer: React.FC = () => {
       disabled: true,
       details: values.description,
     };
-
+    if(validationAccess(name,ROUTES.ADVANCEMENTS_ROUTE,'delete')){
     const rs = await mutate(data);
 
     if (rs?.data?.success) {
       navigation.goBack();
+      NotificationComponent(message[0].success.operation)
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   return (

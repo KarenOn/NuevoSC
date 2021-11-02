@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-
+import {validationAccess} from '../../utils'
+import message from '../../utils/message.json'
 // Components
 import { IncomeExpensesComponent } from '../../components';
-
+import {NotificationComponent} from '../../components/common';
 // Context
 import { IncomeExpenseContext, SessionContext } from '../../context/';
 
@@ -80,6 +81,7 @@ const IncomeExpensesContainer: React.FC = () => {
   ]);
 
   const onAdd = () => {
+    if(validationAccess(name,ROUTES.INCOME_EXPENSE_ROUTE,'create')){
     incomeExpenseDispatch({
       type: IncomeExpenseContext.ActionTypes.SET_INCOME_EXPENSE_DRAFT,
       value: {
@@ -92,17 +94,25 @@ const IncomeExpensesContainer: React.FC = () => {
       },
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onEdit = () => {
+    if(validationAccess(name,ROUTES.INCOME_EXPENSE_ROUTE,'update')){
     incomeExpenseDispatch({
       type: IncomeExpenseContext.ActionTypes.SET_INCOME_EXPENSE_DRAFT,
       value: item,
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onRemove = async () => {
+    if(validationAccess(name,ROUTES.INCOME_EXPENSE_ROUTE,'delete')){
     const data: DisabledData = {
       // @ts-ignore
       id: item.id,
@@ -115,6 +125,7 @@ const IncomeExpensesContainer: React.FC = () => {
     if (rs && rs.data.success) {
       // Close modal and reload
       onShowOverlay();
+      NotificationComponent(message[0].success.operation)
       const getRs = await mutate();
       if (getRs && getRs.data.success) {
         incomeExpenseDispatch({
@@ -122,6 +133,9 @@ const IncomeExpensesContainer: React.FC = () => {
           value: getRs.data.responseData,
         });
       }
+    }}
+    else{
+      NotificationComponent(message[0].error.access)
     }
   };
 

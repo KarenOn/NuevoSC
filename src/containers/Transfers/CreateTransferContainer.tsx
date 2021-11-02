@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
+import {validationAccess} from '../../utils'
+import message from '../../utils/message.json'
+import { ROUTES } from '../../constants';
 // Components
 import { CreateTransferComponent } from '../../components';
 
@@ -30,7 +32,7 @@ interface SubmitProps {
 
 const CreateTransferContainer: React.FC = () => {
   const {
-    user: { id },
+    user: { id ,rol:{name}},
   } = SessionContext.useState();
   const { transferDraft } = TransferContext.useState();
   const { offices } = OfficeContext.useState();
@@ -85,11 +87,14 @@ const CreateTransferContainer: React.FC = () => {
     };
 
     const rs = await mutate(data);
-
+    if(validationAccess(name,ROUTES.TRANSFER_ROUTE,'create')){
     if (rs && rs.data.success) {
-      NotificationComponent('Operation success')
+      NotificationComponent(message[0].success.operation)
       navigation.goBack();
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onEdit = async (
@@ -104,13 +109,16 @@ const CreateTransferContainer: React.FC = () => {
       observation: values.details,
       id: transferDraft.id,
     };
-
+    if(validationAccess(name,ROUTES.TRANSFER_ROUTE,'update')){
     const rs = await editMutate(data);
 
     if (rs && rs.data.success) {
-      NotificationComponent('Operation success')
+      NotificationComponent(message[0].success.operation)
       navigation.goBack();
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onOfficeChange = async (

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { ToastAndroid, TouchableOpacity } from 'react-native';
+import {validationAccess} from '../../utils/';
+import message from '../../utils/message.json';
+import {ROUTES} from '../../constants/'
 
 // Components
 import { CreateCreditComponent } from '../../components';
@@ -94,7 +96,7 @@ const CreateCreditContainer: React.FC = () => {
       max_credit_value as number,
       values.amount.toString(),
     );
-
+  if(validationAccess(rolName,ROUTES.CREDITS_ROUTE,'create')){
     if (isValidDuration.success) {
       if (isValidCreditAmount.success) {
         const payments = getPayments(values.payment_periosity, parseDuration);
@@ -116,16 +118,19 @@ const CreateCreditContainer: React.FC = () => {
         const rs = await mutate(data);
 
         if (rs?.data?.success) {
-          NotificationComponent('operation success');
+          NotificationComponent(message[0].success.operation);
           navigation.goBack();
         }else{
-          NotificationComponent('error')
+          NotificationComponent(message[0].error.operation)
         }
       } else {
         setSubmitError({ message: isValidCreditAmount.message });
       }
     } else {
       setSubmitError({ message: isValidDuration.message });
+    }
+  }else{
+      NotificationComponent(message[0].error.access)
     }
   };
 

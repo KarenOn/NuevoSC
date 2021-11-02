@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-
+import { NotificationComponent} from '../../components/common';
+import {validationAccess} from '../../utils'
+import message from '../../utils/message.json'
 // Components
 import { UsersComponent } from '../../components';
 
@@ -70,6 +72,7 @@ const UsersContainer: React.FC = () => {
   }, [isFocused, mutate, userDispatch, filterValue, reset, removeReset]);
 
   const onAdd = () => {
+    if(validationAccess(name,ROUTES.USERS_ROUTE,'create')){
     userDispatch({
       type: SessionContext.ActionTypes.SET_NEW_USER_DRAFT,
       value: {
@@ -82,14 +85,21 @@ const UsersContainer: React.FC = () => {
       },
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onEdit = () => {
+    if(validationAccess(name,ROUTES.USERS_ROUTE,'update')){
     userDispatch({
       type: SessionContext.ActionTypes.SET_USER_DRAFT,
       value: item,
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onRemove = async () => {
@@ -100,6 +110,7 @@ const UsersContainer: React.FC = () => {
       disabled: !item.disabled,
       _user: id as number,
     };
+    if(validationAccess(name,ROUTES.USERS_ROUTE,'delete')){
     const rs = await removeMutate(data);
 
     if (rs && rs.data.success) {
@@ -112,6 +123,8 @@ const UsersContainer: React.FC = () => {
           value: getRs.data.responseData,
         });
       }
+    }}else{
+      NotificationComponent(message[0].error.access)
     }
   };
 

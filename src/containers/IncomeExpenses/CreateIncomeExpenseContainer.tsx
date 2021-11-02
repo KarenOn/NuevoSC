@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { NotificationComponent } from '../../components/common';
+import {validationAccess} from '../../utils'
+import message from '../../utils/message.json'
+import { ROUTES } from '../../constants/';
 
 // Components
 import { CreateIncomeExpenseComponent } from '../../components';
@@ -38,7 +41,7 @@ interface SubmitProps {
 
 const CreateIncomeExpenseContainer: React.FC = () => {
   const {
-    user: { id },
+    user: { id,rol:{name} },
   } = SessionContext.useState();
   const { incomeExpenseDraft } = IncomeExpenseContext.useState();
   const { incomeExpenseTypes } = IncomeExpenseTypeContext.useState();
@@ -139,13 +142,16 @@ const CreateIncomeExpenseContainer: React.FC = () => {
       _user: id as number,
       observation: values.details,
     };
-
+    if(validationAccess(name,ROUTES.INCOME_EXPENSE_ROUTE,'create')){
     const rs = await mutate(data);
 
     if (rs && rs.data.success) {
       NotificationComponent('Operation success')
       navigation.goBack();
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onEdit = async (
@@ -162,13 +168,16 @@ const CreateIncomeExpenseContainer: React.FC = () => {
       observation: values.details,
       id: incomeExpenseDraft.id,
     };
-
+    if(validationAccess(name,ROUTES.INCOME_EXPENSE_ROUTE,'create')){
     const rs = await editMutate(data);
 
     if (rs && rs.data.success) {
       NotificationComponent('Operation success')
       navigation.goBack();
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onTypeChange = async (

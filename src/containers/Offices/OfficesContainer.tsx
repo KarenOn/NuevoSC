@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
+import {validationAccess} from '../../utils'
+import message from '../../utils/message.json'
+import { NotificationComponent } from '../../components/common';
 
 // Components
 import { OfficesComponent } from '../../components';
@@ -73,19 +76,27 @@ const OfficesContainer: React.FC = () => {
   }, [isFocused, mutate, officeDispatch, filterValue, reset, removeReset]);
 
   const onAdd = () => {
+    if(validationAccess(name,ROUTES.OFFICES_ROUTE,'create')){
     officeDispatch({
       type: OfficeContext.ActionTypes.SET_NEW_OFFICE_DRAFT,
       value: officeMock,
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onEdit = () => {
+    if(validationAccess(name,ROUTES.OFFICES_ROUTE,'update')){
     officeDispatch({
       type: OfficeContext.ActionTypes.SET_OFFICE_DRAFT,
       value: item,
     });
     onNavigate();
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onRemove = async () => {
@@ -96,6 +107,7 @@ const OfficesContainer: React.FC = () => {
       disabled: !item.disabled,
       _user: id as number,
     };
+    if(validationAccess(name,ROUTES.OFFICES_ROUTE,'delete')){
     const rs = await removeMutate(data);
 
     if (rs && rs.data.success) {
@@ -103,12 +115,16 @@ const OfficesContainer: React.FC = () => {
       onShowOverlay();
       const getRs = await mutate();
       if (getRs && getRs.data.success) {
+        NotificationComponent(message[0].success.operation)
         officeDispatch({
           type: OfficeContext.ActionTypes.SET_OFFICES,
           value: getRs.data.responseData,
         });
       }
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onNavigate = () => {

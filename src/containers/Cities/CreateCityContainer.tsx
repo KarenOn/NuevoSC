@@ -12,11 +12,11 @@ import { CityContext, SessionContext } from '../../context/';
 // Services
 import { cityData, useCreateCity, useUpdateCity } from '../../services/';
 import { NotificationComponent } from '../../components/common';
-import { ROUTES } from 'src/constants';
+import { ROUTES } from '../../constants';
 
 const CreateCityContainer: React.FC = () => {
   const {
-    user: { id,name },
+    user: { id,rol:{name} },
   } = SessionContext.useState();
   const { cityDraft } = CityContext.useState();
   const [mutate, { status, error }] = useCreateCity();
@@ -43,15 +43,16 @@ const CreateCityContainer: React.FC = () => {
   };
 
   const onEdit = async (values: CityContext.City) => {
-    if(validationAccess(name,ROUTES.CITIES_ROUTE,'create')){
+   
     const data: cityData = {
       ...values,
       _user: id?.toString() as string,
-    };
+    }; 
+  if(validationAccess(name,ROUTES.CITIES_ROUTE,'create')){
     const rs = await editMutate(data);
 
     if (rs && rs.data.success) {
-      NotificationComponent('operation success!! ')
+      NotificationComponent(message[0].success.operation)
       navigation.goBack();
     }
   }else{

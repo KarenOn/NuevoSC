@@ -1,5 +1,8 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
+import {validationAccess} from '../../utils'
+import message from '../../utils/message.json'
+import { ROUTES } from '../../constants/';
 
 // Components
 import { CreateRolComponent } from '../../components';
@@ -13,7 +16,7 @@ import { NotificationComponent } from '../../components/common';
 
 const CreateRolContainer: React.FC = () => {
   const {
-    user: { id },
+    user: { id,rol:{name} },
   } = SessionContext.useState();
   const { rolDraft } = RolContext.useState();
   const [mutate, { status, error }] = useCreateRol();
@@ -25,12 +28,17 @@ const CreateRolContainer: React.FC = () => {
       ...values,
       _user: id?.toString() as string,
     };
+    if(validationAccess(name,ROUTES.ROLES_ROUTE,'create')){
     const rs = await mutate(data);
 
     if (rs && rs.data.success) {
-      NotificationComponent('Operation success')
+      NotificationComponent(message[0].success.operation)
       navigation.goBack();
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
+
   };
 
   const onEdit = async (values: RolContext.Rol) => {
@@ -38,12 +46,16 @@ const CreateRolContainer: React.FC = () => {
       ...values,
       _user: id?.toString() as string,
     };
+    if(validationAccess(name,ROUTES.ROLES_ROUTE,'update')){
     const rs = await editMutate(data);
 
     if (rs && rs.data.success) {
-      NotificationComponent('Operation success')
+      NotificationComponent(message[0].success.operation)
       navigation.goBack();
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   return (

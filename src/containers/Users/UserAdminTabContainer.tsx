@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { NotificationComponent} from '../../components/common';
+import {validationAccess} from '../../utils'
+import message from '../../utils/message.json'
 
 // Components
 import { UserAdminTabComponent } from '../../components';
@@ -26,7 +29,7 @@ import {
 } from '../../services/';
 
 // Constants
-import { TextConstants } from '../../constants/';
+import { TextConstants,ROUTES } from '../../constants/';
 
 // Utils
 import {
@@ -65,7 +68,7 @@ const sendRoute = (value: HashTable) =>
 const UserAdminTabContainer: React.FC = () => {
   const {
     userDraft,
-    user: { id },
+    user: { id, rol:{name} },
   } = SessionContext.useState();
   const [mutate, { status, error }] = useCreateUser();
   const [
@@ -161,21 +164,29 @@ const UserAdminTabContainer: React.FC = () => {
   };
 
   const onSave = async (data: SessionContext.UserToSend) => {
+    if(validationAccess(name,ROUTES.USERS_ROUTE,'create')){
     const rs = await mutate(data);
 
     if (rs && rs.data.success) {
       // @ts-ignore
       params?.parentNavigator.goBack();
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const onEdit = async (data: SessionContext.UserToSend) => {
+    if(validationAccess(name,ROUTES.USERS_ROUTE,'update')){
     const rs = await editMutate(data);
 
     if (rs && rs.data.success) {
       // @ts-ignore
       params?.parentNavigator.goBack();
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   const showAlert = (

@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
+import {validationAccess} from '../../utils'
+import message from '../../utils/message.json'
+import { NotificationComponent } from '../../components/common';
+import { ROUTES } from '../../constants/';
 
 // Components
 import { AdviserReportComponent } from '../../components';
@@ -22,7 +26,6 @@ const AdviserReportContainer: React.FC = () => {
     const rs = await mutate();
 
     if (rs && rs.data?.success) {
-      console.log(rs.data.responseData);
       setItem(rs.data.responseData);
     }
   };

@@ -1,6 +1,9 @@
 import React from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { NotificationComponent } from '../../components/common';
+import {validationAccess} from '../../utils'
+import message from '../../utils/message.json'
+import { ROUTES } from '../../constants/';
 
 // Components
 import { CreditsTabComponent } from '../../components';
@@ -14,7 +17,7 @@ import { useCreateOffice, useUpdateOffice } from '../../services/';
 const CreditsTabContainer: React.FC = () => {
   const { officeDraft } = OfficeContext.useState();
   const {
-    user: { id },
+    user: { id, rol:{name} },
   } = SessionContext.useState();
   const [mutate, { status, error }] = useCreateOffice();
   const [
@@ -34,12 +37,18 @@ const CreditsTabContainer: React.FC = () => {
       maximum_percent: 0,
       _user: id as number,
     };
+    if(validationAccess(name,ROUTES.OFFICES_ROUTE,'create')){
     const rs = await mutate(data);
 
-    if (rs && rs.data.success) {
-      // @ts-ignore
-      //NotificationComponent('Operation success');
-      params?.parentNavigator.goBack();
+      if (rs && rs.data.success) {
+        // @ts-ignore
+        //
+        params?.parentNavigator.goBack();
+        NotificationComponent(message[0].success.operation);
+      }
+  }else{
+    NotificationComponent(message[0].error.access)
+
     }
   };
 
@@ -51,13 +60,18 @@ const CreditsTabContainer: React.FC = () => {
       maximum_percent: 0,
       _user: id as number,
     };
+    if(validationAccess(name,ROUTES.OFFICES_ROUTE,'update')){
     const rs = await editMutate(data);
 
     if (rs && rs.data.success) {
       // @ts-ignore
       //NotificationComponent('Operation success')
       params?.parentNavigator.goBack();
+      NotificationComponent(message[0].success.access)
     }
+  }else{
+    NotificationComponent(message[0].error.access)
+  }
   };
 
   return (
