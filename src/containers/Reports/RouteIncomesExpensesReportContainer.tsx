@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
-
+import { NotificationComponent } from '../../components/common';
+import message from '../../utils/message.json'
 // Components
 import { RouteDayBalanceReportComponent } from '../../components';
 
@@ -61,7 +62,7 @@ const RouteIncomesExpensesReportContainer: React.FC = () => {
 
     if (rs?.data?.success) {
       const { path, fileName } = rs.data.responseData;
-      setLink(`${BASE_URL}api/openReports?path=${path}&fileName=${fileName}`);
+      setLink(`${BASE_URL}api/openReport?path=${path}&fileName=${fileName}`);
     }
   };
 
@@ -70,7 +71,7 @@ const RouteIncomesExpensesReportContainer: React.FC = () => {
     setFieldValue: (filed: string, value: string) => void,
   ) => {
     setFieldValue('route', '');
-    setLink('');
+    //setLink('');
     if (value) {
       const rs = await routeMutate(value);
       if (rs?.data?.success) {
@@ -78,6 +79,8 @@ const RouteIncomesExpensesReportContainer: React.FC = () => {
           type: RouteContext.ActionTypes.SET_ROUTES,
           value: rs.data.responseData,
         });
+      } else{
+        NotificationComponent(message[0].error.access)
       }
     } else {
       routeDispatch({

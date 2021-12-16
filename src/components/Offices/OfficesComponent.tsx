@@ -172,9 +172,9 @@ function OfficesComponent(props: Props) {
           />
         </View>
       )}
-      { console.log('estatus: ' + status) }
+      {/* { console.log('estatus: ' + status) } */}
       { status === 'loading' && <SplashComponent /> }
-      { console.log('datos: ' + data) }      
+      {/* { console.log('datos: ' + data) }       */}
       {data.length > 0 && !error && !filterError && (
         <FlatList
           style={GeneralStyles.marginT15}

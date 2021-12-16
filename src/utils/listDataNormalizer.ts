@@ -419,9 +419,9 @@ export const incomeExpenseNormalizer = (data: IncomeExpense) => {
 
 export const transferNormalizer = (data: Transfer) => {
   const disabled = data.disabled ? 'N' : 'S';
-  const origin = data.route_origin || data.office;
-  const destination = data.route_destination || data.office;
-  const officeName = capitalizeFirst(data.office?.name as string);
+  const origin = data._route_origin || data._office;
+  const destination = data._route_destination || data._office;
+  const officeName = capitalizeFirst(data._office?.name as string);
   const originName = capitalizeFirst(origin?.name as string);
   const destinationName = capitalizeFirst(destination?.name as string);
 
@@ -661,14 +661,15 @@ export const incomeExpenseCategoriesSelectData = (
     default: { value: 'default', label: 'Seleccione la Categoría' },
   };
   const data = ['default'];
-
-  _data.map((obj) => {
-    hashTable[obj.id?.toString() as string] = {
-      value: obj.id,
-      label: obj.name,
-    };
-    data.push(obj.id?.toString() as string);
-  });
+  if( _data.length > 0 ){
+    _data.map((obj) => {
+      hashTable[obj.id?.toString() as string] = {
+        value: obj.id,
+        label: obj.name,
+      };
+      data.push(obj.id?.toString() as string);
+    });
+}
 
   return {
     data,
@@ -683,7 +684,7 @@ export const incomeExpenseConceptsSelectData = (
     default: { value: 'default', label: 'Seleccione el Concepto' },
   };
   const data = ['default'];
-
+if( _data.length > 0 ){
   _data.map((obj) => {
     hashTable[obj.id?.toString() as string] = {
       value: obj.id,
@@ -691,6 +692,7 @@ export const incomeExpenseConceptsSelectData = (
     };
     data.push(obj.id?.toString() as string);
   });
+}
 
   return {
     data,

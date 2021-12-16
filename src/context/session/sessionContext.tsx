@@ -109,7 +109,7 @@ const DispatchContext: Dispatch<Action> | any = createContext(undefined);
 
 const reducer = (state: Session = defaultValues, action: Action) => { 
 
-  console.log( action );
+  // console.log( action );
 
   switch (action.type) {
     case ActionTypes.SET_USER: {

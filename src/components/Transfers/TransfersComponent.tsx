@@ -88,9 +88,9 @@ function TransfersComponent(props: Props) {
   };
 
   const renderItem: ListRenderItem<Transfer> = ({ item }) => {
-    const { code, route_origin, office, disabled } = item;
+    const { code, _route_origin, _office, disabled } = item;
     const itemStatus = getStatus(disabled as boolean);
-    const name = route_origin?.name || office?.name;
+    const name = _route_origin?.name || _office?.name;
 
     return (
       <ListItem

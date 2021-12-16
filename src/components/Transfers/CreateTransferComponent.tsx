@@ -85,9 +85,9 @@ function CreateTransferComponent(props: Props) {
     onOfficeChange,
   } = props;
   const initialFieldsState = {
-    office: defaultValues.office_of_route.toString(),
-    route_origin: defaultValues.route_origin?.id.toString(),
-    route_destination: defaultValues.route_destination?.id.toString(),
+    _office: defaultValues.office_of_route.toString(),
+    _route_origin: defaultValues._route_origin?.id.toString(),
+    _route_destination: defaultValues._route_destination?.id.toString(),
     details: defaultValues.observation,
     amount: defaultValues.amount.toString(),
   };

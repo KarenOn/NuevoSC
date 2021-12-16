@@ -24,7 +24,7 @@ const AdviserReportContainer: React.FC = () => {
 
   const submitFunction = async () => {
     const rs = await mutate();
-
+    console.log(rs);
     if (rs && rs.data?.success) {
       setItem(rs.data.responseData);
     }

@@ -33,10 +33,10 @@ export interface TransferToSend {
 
 export interface Transfer {
   id?: number;
-  user?: FK;
-  office?: FK;
-  route_origin?: FK;
-  route_destination?: FK;
+  _user?: FK;
+  _office?: FK;
+  _route_origin?: FK;
+  _route_destination?: FK;
   code?: string;
   observation: string;
   amount: number;

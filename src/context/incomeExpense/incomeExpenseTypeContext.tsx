@@ -33,7 +33,7 @@ interface Props {
 }
 
 const defaultValues: IncomeExpenseTypeProps = {
-  incomeExpenseTypes: [],
+  incomeExpenseTypes: [ ],
 };
 
 const StateContext: Context<IncomeExpenseTypeProps> = createContext(

@@ -29,6 +29,8 @@ const TransfersContainer: React.FC = () => {
   const [item, setItem] = useState({});
   const [filterValue, setFilterValue] = useState('');
   const [mutate, { status, error }] = useGetTransfers();
+  const onShowOverlay = () => setShowOverlay(!showOverlay);
+  const onSetItem = (value: TransferContext.Transfer) => setItem(value);
   const [
     filterMutate,
     { error: filterError, reset },
@@ -72,7 +74,7 @@ const TransfersContainer: React.FC = () => {
       fetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFocused, mutate, transferDispatch, filterValue, reset, removeReset]);
+  }, [transfers,mutate,isFocused]);
 
   const onAdd = () => {
     if(validationAccess(name,ROUTES.TRANSFER_ROUTE,'create')){
@@ -137,9 +139,7 @@ const TransfersContainer: React.FC = () => {
     navigation.navigate(ROUTES.CREATE_TRANSFER_ROUTE);
   };
 
-  const onShowOverlay = () => setShowOverlay(!showOverlay);
-
-  const onSetItem = (value: TransferContext.Transfer) => setItem(value);
+  
 
   const onFilterHandlerChange = async (filter: string) => {
     setFilterValue(filter);

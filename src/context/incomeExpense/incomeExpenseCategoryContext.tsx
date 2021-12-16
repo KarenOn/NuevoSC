@@ -17,6 +17,7 @@ enum ActionTypes {
 export interface IncomeExpenseCategory {
   id: number;
   name: string;
+  _income_expense_type:number;
 }
 
 interface IncomeExpenseCategoryProps {

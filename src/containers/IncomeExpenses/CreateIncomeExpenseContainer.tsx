@@ -70,6 +70,7 @@ const CreateIncomeExpenseContainer: React.FC = () => {
     const fetchData = async () => {
       const rs = await typeMutate();
       const officesRs = await officeMutate();
+      
 
       if (rs && rs.data.success && officesRs && officesRs.data.success) {
         typeDispatch({
@@ -80,9 +81,16 @@ const CreateIncomeExpenseContainer: React.FC = () => {
           type: OfficeContext.ActionTypes.SET_OFFICES,
           value: officesRs.data.responseData,
         });
+        // routeDispatch({
+        //   type: RouteContext.ActionTypes.SET_ROUTES,
+        //   value:rm.data.responseData
+        // })
+        // categoryDispatch({
+        //   type: category
+        // })
       }
 
-      if (incomeExpenseDraft.id) {
+      if (incomeExpenseDraft) {
         const typeId = incomeExpenseDraft.income_expense_type?.id || '';
         const categoryId = incomeExpenseDraft.income_expense_category?.id || '';
         const categoryRs = await categoryMutate(typeId.toString());
@@ -134,11 +142,11 @@ const CreateIncomeExpenseContainer: React.FC = () => {
   ) => {
     const data: IncomeExpenseContext.IncomeExpenseToSend = {
       ...values,
-      _income_expense_type: values.income_expense_type,
-      _income_expense_category: values.income_expense_category,
-      _income_expense_concept: values.income_expense_concept,
-      _office: values.office,
-      _route: values.route,
+      _income_expense_type: values._income_expense_type,
+      _income_expense_category: values._income_expense_category,
+      _income_expense_concept: values._income_expense_concept,
+      _office: values._office, 
+      _route: values._route,
       _user: id as number,
       observation: values.details,
     };
@@ -159,11 +167,11 @@ const CreateIncomeExpenseContainer: React.FC = () => {
   ) => {
     const data: IncomeExpenseContext.IncomeExpenseToSend = {
       ...values,
-      _income_expense_type: values.income_expense_type,
-      _income_expense_category: values.income_expense_category,
-      _income_expense_concept: values.income_expense_concept,
-      _office: values.office,
-      _route: values.route,
+      _income_expense_type: values._income_expense_type,
+      _income_expense_category: values._income_expense_category,
+      _income_expense_concept: values._income_expense_concept,
+      _office: values._office,
+      _route: values._route,
       _user: id as number,
       observation: values.details,
       id: incomeExpenseDraft.id,

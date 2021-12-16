@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import {validationAccess} from '../../utils'
-import message from '../../utils/message.json'
+import message from '../../utils/message.json';
 import { ROUTES } from '../../constants';
 // Components
 import { CreateTransferComponent } from '../../components';
@@ -57,9 +57,11 @@ const CreateTransferContainer: React.FC = () => {
           type: OfficeContext.ActionTypes.SET_OFFICES,
           value: officesRs.data.responseData,
         });
+      }else{
+        NotificationComponent(message[0].error.access)
       }
 
-      if (transferDraft.id) {
+      if (transferDraft?.id) {
         const routeRs = await routeMutate(transferDraft.office_of_route);
 
         if (routeRs?.data?.success) {
@@ -128,12 +130,16 @@ const CreateTransferContainer: React.FC = () => {
     setFieldValue('route_origin', '');
     setFieldValue('route_destination', '');
     if (value) {
-      const rs = await routeMutate(value);
+      try{
+      const rs = await routeMutate(value)
       if (rs && rs.data.success) {
         routeDispatch({
           type: RouteContext.ActionTypes.SET_ROUTES,
           value: rs.data.responseData,
         });
+      }
+    }catch(error){
+        NotificationComponent(message[0].error.operation)
       }
     } else {
       routeDispatch({
